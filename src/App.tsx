@@ -23,8 +23,8 @@ function App() {
                             <Route path="/admin" element={<AdminPage/>}/>
                         </Route>
 
-                        <Route element={<PrivateRouter/>}>
-                        <Route path="/" element={<HomePage/>}/>
+                        <Route element={<PrivateRouter requiredRole="admin"/>}>
+                            <Route path="/" element={<HomePage/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>

@@ -1,25 +1,25 @@
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../../shared/store/store.ts";
-import {useEffect} from "react";
-import {increment, setCount, setLoading} from "../model/homeSlice.ts";
+import {useEffect, useState} from "react";
 import {fetchInitialCount} from "../model/homeAPI.ts";
 
 export const useHomeViewModel = () => {
-    const dispatch = useDispatch();
-    const {count, loading} = useSelector((state: RootState) => state.home);
+    const [count, setCount] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const loadInitialCount = async () => {
-            dispatch(setLoading(true));
             const initialCount = await fetchInitialCount();
-            dispatch(setCount(initialCount));
-            dispatch(setLoading(false));
+            setCount(initialCount ?? 0);
+            setLoading(false);
         }
         loadInitialCount();
-    }, [dispatch]);
+    }, []);
+
+    const increaseCount = () => {
+        setCount(prev => prev + 1);
+    }
 
     const onIncrement = () => {
-        dispatch(increment());
+        increaseCount();
     };
 
     return {

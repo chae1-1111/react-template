@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {getLocalStorage, removeLocalStorage, setLocalStorage} from "../../utils/localStorage.ts";
 
 interface AuthState {
     isAuthenticated: boolean;
@@ -6,8 +7,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-    isAuthenticated: false,
-    userRole: null,
+    isAuthenticated: getLocalStorage("userRole") !== undefined,
+    userRole: getLocalStorage("userRole") ?? null,
 };
 
 const authSlice = createSlice({
@@ -15,10 +16,12 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         loginSuccess: (state: AuthState, action: PayloadAction<{ userRole: string }>) => {
+            setLocalStorage("userRole", action.payload.userRole);
             state.isAuthenticated = true;
             state.userRole = action.payload.userRole;
         },
         logout: (state: AuthState) => {
+            removeLocalStorage("userRole");
             state.isAuthenticated = false;
             state.userRole = null;
         },
